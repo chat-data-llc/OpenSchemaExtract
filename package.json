@@ -1,0 +1,59 @@
+{
+  "name": "freeschema-cd",
+  "version": "0.1.0",
+  "description": "Extract structured data (JSON-LD, Microdata, RDFa) from any URL into clean JSON",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "structured-data",
+    "json-ld",
+    "microdata",
+    "rdfa",
+    "schema.org",
+    "web-scraping",
+    "metadata"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "node tests/integration.mjs && tsx tests/extract-smoke.ts",
+    "build:pkg": "tsup"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "geist": "^1.3.1",
+    "next": "^15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.3.0",
+    "tailwindcss": "^4.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.0.0"
+  }
+}
