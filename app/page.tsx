@@ -83,16 +83,6 @@ export default function Home() {
           >
             Chat Data
           </a>
-          {" "}(
-          <a
-            href="https://www.chat-data.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-          >
-            https://www.chat-data.com
-          </a>
-          )
         </div>
       </div>
     </div>
