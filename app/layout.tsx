@@ -4,12 +4,12 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FreeSchema — Extract Structured Data from Any URL",
+  title: "OpenSchemaExtract — Extract Structured Data from Any URL",
   description:
     "Give it any URL and get every structured data block (JSON-LD, Microdata, RDFa) parsed into clean JSON. Products, recipes, events, reviews — all the hidden metadata the web already has.",
   icons: { icon: "/favicon.svg" },
   openGraph: {
-    title: "FreeSchema",
+    title: "OpenSchemaExtract",
     description:
       "Extract JSON-LD, Microdata, and RDFa structured data from any URL.",
     type: "website",

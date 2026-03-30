@@ -13,7 +13,7 @@ export default function Home() {
               </span>
             </div>
             <span className="text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
-              FreeSchema
+              OpenSchemaExtract
             </span>
           </div>
           <a
@@ -71,6 +71,28 @@ export default function Home() {
             <span className="w-2 h-2 rounded-full bg-green-400"></span>
             RDFa
           </span>
+        </div>
+
+        <div className="mt-10 text-center text-sm text-neutral-500 dark:text-neutral-400">
+          Build by{" "}
+          <a
+            href="https://www.chat-data.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+          >
+            Chat Data
+          </a>
+          {" "}(
+          <a
+            href="https://www.chat-data.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+          >
+            https://www.chat-data.com
+          </a>
+          )
         </div>
       </div>
     </div>
