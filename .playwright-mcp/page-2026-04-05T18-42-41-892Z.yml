@@ -1,0 +1,31 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - main [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "OpenBrand logo OpenBrand" [ref=e6] [cursor=pointer]:
+            - /url: /
+            - img "OpenBrand logo" [ref=e7]
+            - heading "OpenBrand" [level=1] [ref=e8]
+          - paragraph [ref=e9]: Enter a website to extract its brand assets - logos, colors, and images.
+        - link "GitHub stars" [ref=e11] [cursor=pointer]:
+          - /url: https://github.com/ethanjyx/openbrand
+          - img "GitHub stars" [ref=e12]
+      - generic [ref=e14]:
+        - textbox "Enter a website URL (e.g. stripe.com, tight.studio)" [ref=e15]
+        - button "Extract" [disabled] [ref=e16]
+      - generic [ref=e17]:
+        - heading "Get Started" [level=2] [ref=e18]
+        - generic [ref=e19]:
+          - button "With API Key" [ref=e20]
+          - button "Agent Skill" [ref=e21]
+          - button "Self Hosting" [ref=e22]
+          - button "MCP" [ref=e23]
+        - link "Login to get API key" [ref=e25] [cursor=pointer]:
+          - /url: /login
+    - contentinfo [ref=e26]:
+      - text: OpenBrand is designed, built, and backed by
+      - link "Tight Software LLC" [ref=e27] [cursor=pointer]:
+        - /url: https://tight.software/
+      - text: .
+  - alert [ref=e28]

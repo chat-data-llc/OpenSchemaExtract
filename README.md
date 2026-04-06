@@ -6,6 +6,8 @@ OpenSchemaExtract includes:
 - A reusable TypeScript/Node extractor library
 - A Next.js API endpoint (`/api/extract`)
 - A minimal web UI for interactive extraction
+- A Claude Code plugin for AI agents (see [PLUGIN.md](./PLUGIN.md))
+- An MCP server for Claude Desktop and other MCP clients (see [mcp-server/README.md](./mcp-server/README.md))
 
 ## GitHub Description
 
@@ -23,19 +25,64 @@ Extract JSON-LD, Microdata, and RDFa from any URL with a fast TypeScript library
 
 ## Quick Start
 
-### Prerequisites
+### 1. With API Key
 
-- Node.js 18+
-
-### Install
+Get an API key from [https://openschemaextract.com/dashboard](https://openschemaextract.com/dashboard), then call the API:
 
 ```bash
-npm install
+curl -H "Authorization: Bearer osx_live_your_key" \
+  "https://openschemaextract.com/api/extract?url=https://schema.org/Recipe"
 ```
 
-### Run the Web App
+No API key? Demo usage is available (rate-limited) — just omit the `Authorization` header.
+
+### 2. Agent Skill (Claude Code, Cursor, etc.)
 
 ```bash
+npx skills add chat-data-llc/OpenSchemaExtract
+```
+
+Then ask your AI agent: `"extract schema from https://schema.org/Recipe"`
+
+See [PLUGIN.md](./PLUGIN.md) for details.
+
+### 3. Self Hosting (npm package)
+
+```bash
+npm install openschemaextract
+```
+
+```typescript
+import { extractSchema } from "openschemaextract";
+
+const result = await extractSchema("https://schema.org/Recipe");
+if (result.ok) {
+  console.log(result.data.blocks); // All schema blocks
+}
+```
+
+Runs entirely on your server — no API calls, no rate limits.
+
+### 4. MCP (Model Context Protocol)
+
+```bash
+claude mcp add --transport stdio \
+  --env OPENSCHEMAEXTRACT_API_KEY=osx_live_your_key \
+  openschemaextract -- npx -y openschemaextract-mcp
+```
+
+See [mcp-server/README.md](./mcp-server/README.md) for details.
+
+---
+
+### For Contributors
+
+**Prerequisites**: Node.js 18+
+
+```bash
+git clone https://github.com/chat-data-llc/OpenSchemaExtract.git
+cd OpenSchemaExtract
+npm install
 npm run dev
 ```
 
@@ -89,18 +136,32 @@ curl "http://localhost:3000/api/extract?url=schema.org/Recipe"
 
 ## Library Usage
 
-```ts
-import { fetchFreeSchema } from "freeschema-cd";
+Install the package:
 
-const result = await fetchFreeSchema("https://schema.org/Recipe");
+```bash
+npm install openschemaextract
+```
+
+Use it in your Node.js code:
+
+```ts
+import { extractSchema } from "openschemaextract";
+
+const result = await extractSchema("https://schema.org/Recipe");
 
 if (result.ok) {
-  console.log(result.data.schemaTypes);
-  console.log(result.data.blocks.length);
+  console.log(result.data.schemaTypes); // ["Recipe"]
+  console.log(result.data.blocks); // All schema blocks
+  console.log(result.data.byType); // Grouped by @type
 } else {
   console.error(result.error.code, result.error.message);
 }
 ```
+
+Available exports:
+- `extractSchema(url: string)` — Main extraction function
+- `extract(url: string)` — Alias
+- TypeScript types: `ExtractionResult`, `SchemaBlock`, `ExtractionError`, `ExtractionErrorCode`
 
 ## Scripts
 

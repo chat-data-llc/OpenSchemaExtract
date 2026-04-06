@@ -18,18 +18,14 @@ function parseBlocks(html: string): SchemaBlock[] {
 }
 
 function buildResult(url: string, blocks: SchemaBlock[]): ExtractionResult {
-  const seen = new Set<string>();
   const schemaTypes: string[] = [];
+  const byType: Record<string, SchemaBlock[]> = {};
+
   for (const block of blocks) {
-    if (!seen.has(block.type)) {
-      seen.add(block.type);
+    if (!byType[block.type]) {
+      byType[block.type] = [];
       schemaTypes.push(block.type);
     }
-  }
-
-  const byType: Record<string, SchemaBlock[]> = {};
-  for (const block of blocks) {
-    if (!byType[block.type]) byType[block.type] = [];
     byType[block.type].push(block);
   }
 

@@ -4,7 +4,7 @@ import type { SchemaBlock } from "../types";
 
 type CheerioAPI = ReturnType<typeof cheerio.load>;
 
-function resolveType(typeAttr: string, vocab: string): string {
+function resolveType(typeAttr: string): string {
   if (typeAttr.startsWith("http://") || typeAttr.startsWith("https://")) {
     const slash = typeAttr.lastIndexOf("/");
     return slash !== -1 ? typeAttr.slice(slash + 1) : typeAttr;
@@ -12,10 +12,6 @@ function resolveType(typeAttr: string, vocab: string): string {
   if (typeAttr.includes(":")) {
     const colon = typeAttr.lastIndexOf(":");
     return typeAttr.slice(colon + 1);
-  }
-  // relative — use vocab
-  if (vocab) {
-    return typeAttr; // just use the local name
   }
   return typeAttr;
 }
@@ -77,26 +73,17 @@ export function parseRdfa(html: string): SchemaBlock[] {
   const $ = cheerio.load(html);
   const blocks: SchemaBlock[] = [];
 
-  // Get default vocab from <html> or <body>
-  const defaultVocab =
-    $("html").attr("vocab") ?? $("body").attr("vocab") ?? "";
-
   $("[typeof]").each((_, el) => {
     // Skip nested typeof elements (handled by collectProperties)
     const parent = $(el).parent().closest("[typeof]");
     if (parent.length > 0) return;
 
     const typeAttr = $(el).attr("typeof") ?? "";
-    const vocab =
-      $(el).attr("vocab") ??
-      $(el).closest("[vocab]").attr("vocab") ??
-      defaultVocab;
-
     const types = typeAttr.split(/\s+/).filter(Boolean);
     const data = collectProperties($, el);
 
     for (const t of types) {
-      const typeName = resolveType(t, vocab);
+      const typeName = resolveType(t);
       blocks.push({ format: "rdfa", type: typeName, data });
     }
   });

@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      # MongoDB connection
+      MONGODB_URI: mongodb://mongodb:27017
+      MONGODB_DB: openschemaextract
+
+      # Auth.js configuration
+      AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_URL: ${AUTH_URL:-http://localhost:3000}
+      AUTH_TRUST_HOST: "true"
+
+      # GitHub OAuth
+      AUTH_GITHUB_ID: ${AUTH_GITHUB_ID}
+      AUTH_GITHUB_SECRET: ${AUTH_GITHUB_SECRET}
+
+      # OAuth 2.1 Authorization Server
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:3000}
+      OAUTH_JWT_SECRET: ${OAUTH_JWT_SECRET}
+
+      # Node environment
+      NODE_ENV: production
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - openschemaextract
+
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+    networks:
+      - openschemaextract
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  openschemaextract:
+    driver: bridge

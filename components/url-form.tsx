@@ -128,6 +128,8 @@ export function UrlForm() {
 }
 
 function errorMessage(code?: ApiErrorCode, fallback?: string): string {
+  // ACCESS_BLOCKED: prefer the server's specific message (e.g. "bot protection")
+  // over the generic client-side copy.
   if (code === "ACCESS_BLOCKED") {
     return fallback ?? CLIENT_ERROR_MESSAGES.ACCESS_BLOCKED;
   }

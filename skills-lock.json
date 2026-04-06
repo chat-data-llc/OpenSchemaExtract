@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "extract-schema": {
+      "source": "/home/yongrui/Documents/OpenSchemaExtract",
+      "sourceType": "local",
+      "computedHash": "d4ae5e42a9e0d7ab3e3d1879a4c57333fcc4cfbe401bc226cd12db31cabf7b0e"
+    }
+  }
+}
