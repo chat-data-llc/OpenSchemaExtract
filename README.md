@@ -73,6 +73,24 @@ claude mcp add --transport stdio \
 
 See [mcp-server/README.md](./mcp-server/README.md) for details.
 
+### 5. Docker Deployment (Production)
+
+Deploy to your own VPS with one command:
+
+```bash
+git clone https://github.com/chat-data-llc/OpenSchemaExtract.git
+cd OpenSchemaExtract
+./deploy.sh
+```
+
+Includes Next.js app + MongoDB in Docker Compose with:
+- Automatic SSL via Nginx + Certbot (optional)
+- Data persistence with Docker volumes
+- Health checks and auto-restart
+- Complete production configuration
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for full deployment guide.
+
 ---
 
 ### For Contributors
@@ -182,6 +200,22 @@ src/                 Extractor library and parsers
 src/parsers/         JSON-LD, Microdata, RDFa parsers
 tests/               Integration and smoke tests
 ```
+
+## Deployment
+
+For production deployment with Docker, Nginx, and SSL:
+
+**Quick deploy to VPS:**
+```bash
+./deploy.sh
+```
+
+**Full guide:** See [DEPLOYMENT.md](./DEPLOYMENT.md) for:
+- Docker + Docker Compose setup
+- Nginx reverse proxy configuration
+- SSL certificate with Let's Encrypt
+- Environment variables reference
+- Monitoring and backup procedures
 
 ## Production Notes
 
