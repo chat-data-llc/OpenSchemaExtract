@@ -5,3 +5,5 @@ dist/
 coverage/
 *.log
 .env*.local
+.env.production
+*.tgz
