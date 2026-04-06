@@ -1,0 +1,45 @@
+{
+  "name": "openschemaextract-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for OpenSchemaExtract - Extract structured data from any URL",
+  "type": "module",
+  "bin": {
+    "openschemaextract-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "structured-data",
+    "schema-org",
+    "json-ld",
+    "microdata",
+    "rdfa"
+  ],
+  "author": "Chat Data LLC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chat-data-llc/OpenSchemaExtract.git",
+    "directory": "mcp-server"
+  },
+  "homepage": "https://openschemaextract.com",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

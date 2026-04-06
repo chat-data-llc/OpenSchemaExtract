@@ -1,0 +1,14 @@
+# Exclude Next.js and development files from npm package
+.next/
+node_modules/
+.env*
+.claude/
+tests/
+app/
+components/
+public/
+*.log
+tsconfig.json
+next.config.ts
+tailwind.config.ts
+postcss.config.mjs

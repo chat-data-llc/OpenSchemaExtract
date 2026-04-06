@@ -9,6 +9,39 @@ function typeFromUrl(itemtype: string): string {
   return slash !== -1 ? itemtype.slice(slash + 1) : itemtype;
 }
 
+/** Resolve the value of a microdata property element based on its tag name. */
+function resolveElementValue(
+  $: CheerioAPI,
+  child: Element
+): unknown {
+  const $child = $(child);
+  const tagName = child.tagName?.toLowerCase();
+
+  switch (tagName) {
+    case "meta":
+      return $child.attr("content") ?? $child.text().trim();
+    case "link":
+    case "a":
+      return $child.attr("href") ?? $child.text().trim();
+    case "img":
+      return $child.attr("src") ?? $child.text().trim();
+    case "time":
+      return $child.attr("datetime") ?? $child.text().trim();
+    default:
+      return $child.text().trim();
+  }
+}
+
+/** Merge all entries from `source` into `target` using appendProp. */
+function mergeProps(
+  target: Record<string, unknown>,
+  source: Record<string, unknown>
+): void {
+  for (const [k, v] of Object.entries(source)) {
+    appendProp(target, k, v);
+  }
+}
+
 function extractItemProps(
   $: CheerioAPI,
   el: Element
@@ -20,9 +53,9 @@ function extractItemProps(
     .each((_, child) => {
       const $child = $(child);
       const prop = $child.attr("itemprop");
+      const hasScope = $child.attr("itemscope") !== undefined;
 
-      if ($child.attr("itemscope") !== undefined && prop) {
-        // nested item
+      if (hasScope && prop) {
         const nestedType = $child.attr("itemtype");
         const nestedData = extractItemProps($, child);
         if (nestedType) nestedData["@type"] = typeFromUrl(nestedType);
@@ -30,42 +63,14 @@ function extractItemProps(
         return;
       }
 
-      if ($child.attr("itemscope") !== undefined && !prop) {
-        // nested scope without itemprop — recurse but don't add to parent
-        return;
-      }
+      // nested scope without itemprop -- skip
+      if (hasScope) return;
 
       if (prop) {
-        const tagName = (child as Element).tagName?.toLowerCase();
-        let value: unknown;
-
-        if (tagName === "meta") {
-          value = $child.attr("content") ?? $child.text().trim();
-        } else if (tagName === "link") {
-          value = $child.attr("href") ?? $child.text().trim();
-        } else if (tagName === "a") {
-          value = $child.attr("href") ?? $child.text().trim();
-        } else if (tagName === "img") {
-          value = $child.attr("src") ?? $child.text().trim();
-        } else if (tagName === "time") {
-          value = $child.attr("datetime") ?? $child.text().trim();
-        } else {
-          value = $child.text().trim();
-        }
-
-        appendProp(data, prop, value);
-
-        // recurse into children that have itemprop but aren't nested itemscope
-        const childData = extractChildProps($, child);
-        for (const [k, v] of Object.entries(childData)) {
-          appendProp(data, k, v);
-        }
+        appendProp(data, prop, resolveElementValue($, child));
+        mergeProps(data, extractChildProps($, child));
       } else {
-        // no itemprop, recurse
-        const childData = extractChildProps($, child);
-        for (const [k, v] of Object.entries(childData)) {
-          appendProp(data, k, v);
-        }
+        mergeProps(data, extractChildProps($, child));
       }
     });
 
@@ -82,26 +87,13 @@ function extractChildProps(
     .children()
     .each((_, child) => {
       const $child = $(child);
+      if ($child.attr("itemscope") !== undefined) return;
+
       const prop = $child.attr("itemprop");
-
-      if ($child.attr("itemscope") !== undefined) return; // handled by parent
-
       if (prop) {
-        const tagName = (child as Element).tagName?.toLowerCase();
-        let value: unknown;
-        if (tagName === "meta") value = $child.attr("content") ?? $child.text().trim();
-        else if (tagName === "link") value = $child.attr("href") ?? $child.text().trim();
-        else if (tagName === "a") value = $child.attr("href") ?? $child.text().trim();
-        else if (tagName === "img") value = $child.attr("src") ?? $child.text().trim();
-        else if (tagName === "time") value = $child.attr("datetime") ?? $child.text().trim();
-        else value = $child.text().trim();
-
-        appendProp(data, prop, value);
+        appendProp(data, prop, resolveElementValue($, child));
       } else {
-        const childData = extractChildProps($, child);
-        for (const [k, v] of Object.entries(childData)) {
-          appendProp(data, k, v);
-        }
+        mergeProps(data, extractChildProps($, child));
       }
     });
 

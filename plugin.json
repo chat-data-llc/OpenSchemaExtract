@@ -1,0 +1,11 @@
+{
+  "name": "openschemaextract",
+  "version": "1.0.0",
+  "description": "Extract JSON-LD, Microdata, and RDFa structured data from any URL",
+  "author": "Chat Data LLC",
+  "homepage": "https://github.com/chat-data-llc/OpenSchemaExtract",
+  "skills": ["SKILL.md"],
+  "commands": [],
+  "agents": [],
+  "hooks": []
+}
