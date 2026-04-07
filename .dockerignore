@@ -3,6 +3,9 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+# Exclude package-lock.json to force fresh npm install in container
+# This fixes the npm optional-dependencies bug with native bindings
+package-lock.json
 
 # Next.js
 .next/

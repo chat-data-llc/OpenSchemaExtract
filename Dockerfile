@@ -1,15 +1,16 @@
 # Multi-stage build for OpenSchemaExtract
-FROM node:18-alpine AS base
+# Uses Debian-slim (glibc) instead of Alpine (musl) to avoid
+# @tailwindcss/oxide native binding issues on Alpine Linux.
+FROM node:20-slim AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package files
-# Use npm install instead of npm ci to avoid optional dependency issues
-# with native bindings (e.g., @tailwindcss/oxide on linux-musl)
-COPY package.json package-lock.json* ./
+# Copy only package.json (NOT package-lock.json) to force fresh resolution
+# This fixes the npm optional-dependencies bug:
+# https://github.com/npm/cli/issues/4828
+COPY package.json ./
 RUN npm install --include=optional
 
 # Rebuild the source code only when needed
@@ -19,7 +20,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build Next.js app
-# Disable telemetry during build
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
@@ -30,8 +30,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs
+RUN useradd --system --uid 1001 --gid nodejs nextjs
 
 # Copy built application
 COPY --from=builder /app/public ./public
