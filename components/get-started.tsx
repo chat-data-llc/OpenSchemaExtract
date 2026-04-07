@@ -113,7 +113,7 @@ export function GetStarted({ isLoggedIn }: { isLoggedIn: boolean }) {
 
 function ApiKeyPanel({ isLoggedIn }: { isLoggedIn: boolean }) {
   const code = `curl -H "Authorization: Bearer osx_live_..." \\
-  https://openschemaextract.com/api/extract?url=https://schema.org/Recipe`;
+  https://openschemaextract.chat-data.com/api/extract?url=https://schema.org/Recipe`;
 
   return (
     <PanelLayout
@@ -138,7 +138,7 @@ function ApiKeyPanel({ isLoggedIn }: { isLoggedIn: boolean }) {
           {" "}
           <Hl t="punct">\</Hl>
           {"\n  "}
-          <Hl t="string">https://openschemaextract.com/api/extract</Hl>
+          <Hl t="string">https://openschemaextract.chat-data.com/api/extract</Hl>
           <Hl t="punct">?</Hl>
           <Hl t="key">url</Hl>
           <Hl t="punct">=</Hl>

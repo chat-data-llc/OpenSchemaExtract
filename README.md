@@ -27,11 +27,11 @@ Extract JSON-LD, Microdata, and RDFa from any URL with a fast TypeScript library
 
 ### 1. With API Key
 
-Get an API key from [https://openschemaextract.com/dashboard](https://openschemaextract.com/dashboard), then call the API:
+Get an API key from [https://openschemaextract.chat-data.com/dashboard](https://openschemaextract.chat-data.com/dashboard), then call the API:
 
 ```bash
 curl -H "Authorization: Bearer osx_live_your_key" \
-  "https://openschemaextract.com/api/extract?url=https://schema.org/Recipe"
+  "https://openschemaextract.chat-data.com/api/extract?url=https://schema.org/Recipe"
 ```
 
 No API key? Demo usage is available (rate-limited) — just omit the `Authorization` header.

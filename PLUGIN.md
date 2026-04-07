@@ -41,12 +41,12 @@ OpenSchemaExtract/
 
 The skill uses the public API endpoint:
 ```
-GET https://openschemaextract.com/api/extract?url={encoded_url}
+GET https://openschemaextract.chat-data.com/api/extract?url={encoded_url}
 ```
 
 **Free tier**: No authentication required, rate-limited for demo usage
 
-**With API key**: Add `Authorization: Bearer osx_live_...` header for unlimited requests. Get your key at https://openschemaextract.com/dashboard
+**With API key**: Add `Authorization: Bearer osx_live_...` header for unlimited requests. Get your key at https://openschemaextract.chat-data.com/dashboard
 
 ## Compatibility
 

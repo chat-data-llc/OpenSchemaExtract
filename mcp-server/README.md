@@ -37,7 +37,7 @@ Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/
 
 #### With API Key (Unlimited)
 
-Get your API key from [https://openschemaextract.com/dashboard](https://openschemaextract.com/dashboard)
+Get your API key from [https://openschemaextract.chat-data.com/dashboard](https://openschemaextract.chat-data.com/dashboard)
 
 ```json
 {
@@ -103,7 +103,7 @@ Extracts structured data from any URL.
 ## Environment Variables
 
 - `OPENSCHEMAEXTRACT_API_KEY` - Your API key (optional, for unlimited access)
-- `OPENSCHEMAEXTRACT_API_URL` - Custom API endpoint (defaults to `https://openschemaextract.com/api/extract`)
+- `OPENSCHEMAEXTRACT_API_URL` - Custom API endpoint (defaults to `https://openschemaextract.chat-data.com/api/extract`)
 
 ## How It Works
 
@@ -127,7 +127,7 @@ The MCP server acts as a bridge between AI assistants and the OpenSchemaExtract 
 - ✓ Priority support
 - ✓ Access to dashboard analytics
 
-Get your key at: [https://openschemaextract.com/dashboard](https://openschemaextract.com/dashboard)
+Get your key at: [https://openschemaextract.chat-data.com/dashboard](https://openschemaextract.chat-data.com/dashboard)
 
 ## License
 
@@ -135,7 +135,7 @@ MIT - See [LICENSE](../LICENSE)
 
 ## Links
 
-- [OpenSchemaExtract Homepage](https://openschemaextract.com)
+- [OpenSchemaExtract Homepage](https://openschemaextract.chat-data.com)
 - [GitHub Repository](https://github.com/chat-data-llc/OpenSchemaExtract)
-- [API Documentation](https://openschemaextract.com#get-started)
+- [API Documentation](https://openschemaextract.chat-data.com#get-started)
 - [Model Context Protocol Specification](https://modelcontextprotocol.io)

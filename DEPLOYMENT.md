@@ -5,7 +5,7 @@ Deploy OpenSchemaExtract to your VPS with Docker in minutes.
 ## Prerequisites
 
 - A VPS with Docker and Docker Compose installed
-- A domain pointing to your VPS (e.g., `openschemaextract.com`)
+- A domain pointing to your VPS (e.g., `openschemaextract.chat-data.com`)
 - GitHub OAuth App credentials
 
 ## Quick Start (One Command)
@@ -63,8 +63,8 @@ AUTH_SECRET=$(openssl rand -base64 32)
 OAUTH_JWT_SECRET=$(openssl rand -base64 32)
 
 # Your domain
-AUTH_URL=https://openschemaextract.com
-OAUTH_ISSUER=https://openschemaextract.com
+AUTH_URL=https://openschemaextract.chat-data.com
+OAUTH_ISSUER=https://openschemaextract.chat-data.com
 
 # GitHub OAuth (create at https://github.com/settings/developers)
 AUTH_GITHUB_ID=your_client_id
@@ -176,7 +176,7 @@ docker-compose exec mongodb mongosh openschemaextract
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `AUTH_SECRET` | NextAuth.js secret key | Generate with `openssl rand -base64 32` |
-| `AUTH_URL` | Your production URL | `https://openschemaextract.com` |
+| `AUTH_URL` | Your production URL | `https://openschemaextract.chat-data.com` |
 | `AUTH_GITHUB_ID` | GitHub OAuth Client ID | From GitHub OAuth App |
 | `AUTH_GITHUB_SECRET` | GitHub OAuth Client Secret | From GitHub OAuth App |
 | `OAUTH_ISSUER` | OAuth 2.1 issuer URL | Same as `AUTH_URL` |

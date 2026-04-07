@@ -31,7 +31,7 @@
     "url": "https://github.com/chat-data-llc/OpenSchemaExtract.git",
     "directory": "mcp-server"
   },
-  "homepage": "https://openschemaextract.com",
+  "homepage": "https://openschemaextract.chat-data.com",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4"
   },

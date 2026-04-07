@@ -8,7 +8,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 const API_KEY = process.env.OPENSCHEMAEXTRACT_API_KEY;
-const API_URL = process.env.OPENSCHEMAEXTRACT_API_URL || "https://openschemaextract.com/api/extract";
+const API_URL = process.env.OPENSCHEMAEXTRACT_API_URL || "https://openschemaextract.chat-data.com/api/extract";
 
 interface SchemaBlock {
   format: string;
