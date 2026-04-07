@@ -73,9 +73,9 @@ claude mcp add --transport stdio \
 
 See [mcp-server/README.md](./mcp-server/README.md) for details.
 
-### 5. Docker Deployment (Production)
+### 5. Self-Host with Docker
 
-Deploy to your own VPS with one command:
+Deploy the full app (Next.js + MongoDB + OAuth) to your own VPS:
 
 ```bash
 git clone https://github.com/chat-data-llc/OpenSchemaExtract.git
@@ -83,13 +83,7 @@ cd OpenSchemaExtract
 ./deploy.sh
 ```
 
-Includes Next.js app + MongoDB in Docker Compose with:
-- Automatic SSL via Nginx + Certbot (optional)
-- Data persistence with Docker volumes
-- Health checks and auto-restart
-- Complete production configuration
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for full deployment guide.
+The `deploy.sh` script auto-generates secrets, sets up Docker containers, and starts the app on port 3000. See the [Self-Hosting](#self-hosting) section below for the full guide with Nginx, SSL, and troubleshooting.
 
 ---
 
