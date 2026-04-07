@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  a, button, [role="button"], [type="submit"], summary, select {
+    cursor: pointer;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
