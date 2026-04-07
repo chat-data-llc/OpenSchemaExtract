@@ -1,9 +1,15 @@
 #!/bin/bash
 
 # OpenSchemaExtract - One-Command Deployment Script
-# Usage: ./deploy.sh
+# Usage: ./deploy.sh [-y|--yes]
 
 set -e
+
+# Parse flags
+AUTO_YES=false
+if [ "$1" = "-y" ] || [ "$1" = "--yes" ]; then
+    AUTO_YES=true
+fi
 
 # Use sudo for docker commands if the current user isn't in the docker group
 DOCKER="docker"
@@ -77,7 +83,9 @@ if [ ! -f .env.production ]; then
     echo "Create a GitHub OAuth App at: https://github.com/settings/developers"
     echo "Callback URL: https://your-domain.com/api/auth/callback/github"
     echo ""
-    read -p "Press Enter after updating .env.production to continue..."
+    if [ "$AUTO_YES" != true ]; then
+        read -p "Press Enter after updating .env.production to continue..."
+    fi
 fi
 
 echo "📋 Current configuration:"
@@ -87,11 +95,13 @@ echo "------------------------"
 echo ""
 
 # Confirm deployment
-read -p "🤔 Deploy with this configuration? (y/N) " -n 1 -r
-echo ""
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "❌ Deployment cancelled"
-    exit 1
+if [ "$AUTO_YES" != true ]; then
+    read -p "🤔 Deploy with this configuration? (y/N) " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "❌ Deployment cancelled"
+        exit 1
+    fi
 fi
 
 echo ""
