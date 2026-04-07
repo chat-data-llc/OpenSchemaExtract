@@ -37,7 +37,7 @@ When the user mentions extracting schema or structured data from a URL:
 ### API Endpoint
 
 ```
-GET https://openschemaextract.com/api/extract?url={encoded_url}
+GET https://openschemaextract.chat-data.com/api/extract?url={encoded_url}
 ```
 
 **Authentication**: Optional
@@ -76,7 +76,7 @@ GET https://openschemaextract.com/api/extract?url={encoded_url}
 
 **Assistant**:
 ```bash
-curl "https://openschemaextract.com/api/extract?url=https%3A%2F%2Fschema.org%2FRecipe"
+curl "https://openschemaextract.chat-data.com/api/extract?url=https%3A%2F%2Fschema.org%2FRecipe"
 ```
 
 Then summarize the key findings:
@@ -91,10 +91,10 @@ If the user mentions they have an OpenSchemaExtract API key or wants unlimited u
 
 ```bash
 curl -H "Authorization: Bearer osx_live_..." \
-  "https://openschemaextract.com/api/extract?url=https%3A%2F%2Fschema.org%2FRecipe"
+  "https://openschemaextract.chat-data.com/api/extract?url=https%3A%2F%2Fschema.org%2FRecipe"
 ```
 
-Direct them to https://openschemaextract.com/dashboard to create an API key if needed.
+Direct them to https://openschemaextract.chat-data.com/dashboard to create an API key if needed.
 
 ## Tips for great responses
 

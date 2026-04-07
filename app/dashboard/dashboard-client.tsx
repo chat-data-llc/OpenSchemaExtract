@@ -47,7 +47,7 @@ export function DashboardClient({
   );
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [apiUrl, setApiUrl] = useState("https://openschemaextract.com/api/extract");
+  const [apiUrl, setApiUrl] = useState("https://openschemaextract.chat-data.com/api/extract");
 
   useEffect(() => {
     // Set the actual origin on client mount to avoid hydration mismatch
