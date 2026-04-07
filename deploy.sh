@@ -32,6 +32,24 @@ fi
 echo "✅ Docker and Docker Compose are installed"
 echo ""
 
+# Ensure the shared Docker network exists
+if ! $DOCKER network inspect shared &> /dev/null; then
+    echo "📡 Creating 'shared' Docker network..."
+    $DOCKER network create shared
+fi
+
+# Connect existing mongo container to shared network if it exists
+if $DOCKER ps --format '{{.Names}}' | grep -q '^mongo$'; then
+    if ! $DOCKER network inspect shared --format '{{range .Containers}}{{.Name}} {{end}}' | grep -q 'mongo'; then
+        echo "🔗 Connecting 'mongo' container to shared network..."
+        $DOCKER network connect shared mongo
+    fi
+    echo "✅ MongoDB container connected to shared network"
+else
+    echo "⚠️  No 'mongo' container found. Make sure MONGODB_URI in .env.production is correct."
+fi
+echo ""
+
 # Check if .env.production exists
 if [ ! -f .env.production ]; then
     echo "⚠️  .env.production not found"
