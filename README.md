@@ -197,19 +197,18 @@ tests/               Integration and smoke tests
 
 ## Self-Hosting
 
-Deploy your own instance of OpenSchemaExtract with Docker. Everything runs in containers: Next.js app, MongoDB, and OAuth. Perfect for a VPS, home server, or private cloud.
+Deploy your own instance of OpenSchemaExtract with Docker. The app runs in a container and connects to an existing MongoDB instance on your server.
 
 ### Prerequisites
 
 - **VPS or server** with Docker and Docker Compose installed
-- **Domain name** pointing to your server (optional, but needed for HTTPS and GitHub OAuth)
+- **MongoDB** running (as a container or standalone)
+- **Domain name** pointing to your server (for HTTPS and GitHub OAuth)
 - **GitHub OAuth App** (for user authentication)
 
 Install Docker if needed:
 ```bash
 curl -fsSL https://get.docker.com | sh
-sudo usermod -aG docker $USER
-# Log out and back in for group changes
 ```
 
 ### Step 1: Clone the Repository
@@ -223,12 +222,23 @@ cd OpenSchemaExtract
 
 1. Go to https://github.com/settings/developers → **New OAuth App**
 2. Fill in:
-   - **Application name**: `OpenSchemaExtract` (or whatever you prefer)
-   - **Homepage URL**: `https://your-domain.com` (or `http://localhost:3000` for local testing)
+   - **Application name**: `OpenSchemaExtract`
+   - **Homepage URL**: `https://your-domain.com`
    - **Authorization callback URL**: `https://your-domain.com/api/auth/callback/github`
 3. Save your **Client ID** and **Client Secret** for the next step
 
-### Step 3: Configure Environment
+### Step 3: Set Up Docker Network
+
+If you have MongoDB running as a Docker container (e.g., named `mongo`), create a shared network so the app can reach it by name:
+
+```bash
+sudo docker network create shared
+sudo docker network connect shared mongo
+```
+
+> If MongoDB is running on the host directly (not in Docker), use `MONGODB_URI=mongodb://host.docker.internal:27017` instead and add `extra_hosts: ["host.docker.internal:host-gateway"]` to `docker-compose.yml`.
+
+### Step 4: Configure Environment
 
 ```bash
 cp .env.production.example .env.production
@@ -242,7 +252,7 @@ Fill in your values:
 AUTH_SECRET=<your-generated-secret>
 OAUTH_JWT_SECRET=<your-generated-secret>
 
-# Your domain (use http://localhost:3000 for local testing)
+# Your domain
 AUTH_URL=https://your-domain.com
 OAUTH_ISSUER=https://your-domain.com
 
@@ -250,37 +260,26 @@ OAUTH_ISSUER=https://your-domain.com
 AUTH_GITHUB_ID=<your-client-id>
 AUTH_GITHUB_SECRET=<your-client-secret>
 
-# MongoDB (leave as-is — docker-compose handles this)
-MONGODB_URI=mongodb://mongodb:27017
+# MongoDB — use your container name (e.g., "mongo") as the hostname
+MONGODB_URI=mongodb://mongo:27017
 MONGODB_DB=openschemaextract
 ```
 
-### Step 4: Deploy
-
-Run the deployment script:
+### Step 5: Deploy
 
 ```bash
 ./deploy.sh
 ```
 
-Or manually with Docker Compose:
+Or manually:
 
 ```bash
-docker compose up -d --build
+sudo docker compose up -d --build
 ```
 
-The script will:
-1. Verify Docker is installed
-2. Auto-generate `AUTH_SECRET` and `OAUTH_JWT_SECRET` if missing
-3. Build the Next.js app in a Docker image
-4. Start the app and MongoDB containers
-5. Print access URLs
+Your app will be available at **http://your-server-ip:3000**
 
-Your app will be available at **http://your-server-ip:3000** 🎉
-
-### Step 5: Set Up HTTPS with Nginx (Recommended for Production)
-
-Install Nginx and Certbot:
+### Step 6: Set Up HTTPS with Nginx (Recommended)
 
 ```bash
 sudo apt update
@@ -295,7 +294,7 @@ server {
     server_name your-domain.com;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -311,80 +310,70 @@ server {
 }
 ```
 
-Enable the site and get an SSL certificate:
+Enable and get SSL:
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/openschemaextract /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
+sudo nginx -t && sudo systemctl reload nginx
 sudo certbot --nginx -d your-domain.com
 ```
-
-Certbot will auto-configure HTTPS and set up auto-renewal. 🔒
 
 ### Management Commands
 
 ```bash
 # View logs
-docker compose logs -f app
+sudo docker compose logs -f app
 
 # Restart app
-docker compose restart app
+sudo docker compose restart app
 
-# Stop everything
-docker compose down
-
-# Stop and delete database (WARNING: destroys data)
-docker compose down -v
+# Stop the app
+sudo docker compose down
 
 # Update to latest code
-git pull
-docker compose up -d --build
-
-# Access MongoDB shell
-docker compose exec mongodb mongosh openschemaextract
+git pull && sudo docker compose up -d --build
 
 # Check running containers
-docker compose ps
+sudo docker compose ps
 ```
 
 ### Environment Variables Reference
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `AUTH_SECRET` | ✅ | NextAuth.js encryption key (generate with `openssl rand -base64 32`) |
-| `AUTH_URL` | ✅ | Your full app URL (e.g., `https://your-domain.com`) |
-| `AUTH_GITHUB_ID` | ✅ | GitHub OAuth Client ID |
-| `AUTH_GITHUB_SECRET` | ✅ | GitHub OAuth Client Secret |
-| `OAUTH_ISSUER` | ✅ | OAuth 2.1 issuer URL (usually same as `AUTH_URL`) |
-| `OAUTH_JWT_SECRET` | ✅ | JWT signing secret (generate with `openssl rand -base64 32`) |
-| `MONGODB_URI` | ✅ | MongoDB connection string (`mongodb://mongodb:27017` for docker-compose) |
-| `MONGODB_DB` | ✅ | Database name (default: `openschemaextract`) |
+| `AUTH_SECRET` | Yes | NextAuth.js encryption key (`openssl rand -base64 32`) |
+| `AUTH_URL` | Yes | Your full app URL (e.g., `https://your-domain.com`) |
+| `AUTH_GITHUB_ID` | Yes | GitHub OAuth Client ID |
+| `AUTH_GITHUB_SECRET` | Yes | GitHub OAuth Client Secret |
+| `OAUTH_ISSUER` | Yes | OAuth 2.1 issuer URL (usually same as `AUTH_URL`) |
+| `OAUTH_JWT_SECRET` | Yes | JWT signing secret (`openssl rand -base64 32`) |
+| `MONGODB_URI` | Yes | MongoDB connection string (e.g., `mongodb://mongo:27017`) |
+| `MONGODB_DB` | Yes | Database name (default: `openschemaextract`) |
 
 ### Troubleshooting
 
+**Build fails with "MONGODB_URI environment variable is required"**
+- The Dockerfile provides a dummy `MONGODB_URI` at build time. Make sure your Dockerfile hasn't been modified.
+
 **Build fails with "Module not found: @/components/..."**
-- Make sure `tsconfig.json` is intact and includes the `@/*` path alias.
+- Make sure `tsconfig.json` includes the `@/*` path alias. Restore it from git if corrupted.
 
 **Tailwind oxide native binding error**
-- The Dockerfile uses `npm install --include=optional` to work around a known npm bug with optional dependencies on Alpine Linux.
+- The Dockerfile uses `node:20-slim` (Debian) and fresh `npm install` to avoid this. Don't switch to Alpine.
 
 **GitHub login doesn't work**
 - Verify the callback URL in your GitHub OAuth App matches `https://your-domain.com/api/auth/callback/github` exactly.
-- Make sure `AUTH_URL` in `.env.production` matches your actual domain.
-
-**"Environment variable not set" warnings**
-- Ensure `.env.production` exists and has all the required variables.
-- The `docker-compose.yml` uses `env_file: - .env.production` to load them.
+- Make sure `AUTH_URL` in `.env.production` matches your domain.
 
 **MongoDB connection fails**
-- Check that the MongoDB container is running: `docker compose ps`
-- View MongoDB logs: `docker compose logs mongodb`
+- Verify your MongoDB container is on the `shared` network: `sudo docker network inspect shared`
+- Check MongoDB is running: `sudo docker ps | grep mongo`
+- Test connectivity: `sudo docker compose exec app sh -c "curl -s mongo:27017"`
 
 **Port 3000 already in use**
-- Change the port in `docker-compose.yml` under the `app` service: `"8080:3000"`
+- Change the port mapping in `docker-compose.yml`: `"127.0.0.1:3001:3000"`
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for even more details on backups, monitoring, and advanced configurations.
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for backup, monitoring, and advanced configurations.
 
 ## Production Notes
 
