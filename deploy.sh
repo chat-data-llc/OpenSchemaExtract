@@ -5,6 +5,12 @@
 
 set -e
 
+# Use sudo for docker commands if the current user isn't in the docker group
+DOCKER="docker"
+if ! docker info &> /dev/null; then
+    DOCKER="sudo docker"
+fi
+
 echo "🚀 OpenSchemaExtract Deployment Script"
 echo "======================================"
 echo ""
@@ -17,7 +23,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Check if Docker Compose is installed
-if ! docker compose version &> /dev/null; then
+if ! $DOCKER compose version &> /dev/null; then
     echo "❌ Docker Compose is not installed."
     echo "Install Docker Compose plugin with: sudo apt-get install docker-compose-plugin"
     exit 1
@@ -72,18 +78,18 @@ fi
 
 echo ""
 echo "🏗️  Building Docker images..."
-docker compose build
+$DOCKER compose build
 
 echo ""
 echo "🚀 Starting services..."
-docker compose up -d
+$DOCKER compose up -d
 
 echo ""
 echo "⏳ Waiting for services to be ready..."
 sleep 10
 
 # Check if services are running
-if docker compose ps | grep -q "Up"; then
+if $DOCKER compose ps | grep -q "Up\|running"; then
     echo ""
     echo "✅ Deployment successful!"
     echo ""
@@ -94,15 +100,15 @@ if docker compose ps | grep -q "Up"; then
     echo "   - API: http://localhost:3000/api/extract"
     echo ""
     echo "📊 Useful commands:"
-    echo "   - View logs: docker compose logs -f app"
-    echo "   - Stop app: docker compose down"
-    echo "   - Restart: docker compose restart app"
+    echo "   - View logs: $DOCKER compose logs -f app"
+    echo "   - Stop app: $DOCKER compose down"
+    echo "   - Restart: $DOCKER compose restart app"
     echo ""
     echo "📖 See DEPLOYMENT.md for Nginx/SSL setup"
 else
     echo ""
     echo "❌ Deployment failed!"
     echo ""
-    echo "Check logs with: docker compose logs app"
+    echo "Check logs with: $DOCKER compose logs app"
     exit 1
 fi
