@@ -286,10 +286,9 @@ if (result.ok) {
 }
 
 function McpPanel({ isLoggedIn }: { isLoggedIn: boolean }) {
-  const installCode = `claude mcp add --transport stdio openschemaextract -- npx -y openschemaextract-mcp`;
-  const withKeyCode = `claude mcp add --transport stdio \\
-  --env OPENSCHEMAEXTRACT_API_KEY=your_api_key \\
-  openschemaextract -- npx -y openschemaextract-mcp`;
+  const installCode = `claude mcp add openschemaextract -- npx -y openschemaextract-mcp`;
+  const withKeyCode = `claude mcp add -e OPENSCHEMAEXTRACT_API_KEY=your_api_key \\
+  -- openschemaextract npx -y openschemaextract-mcp`;
   const jsonCode = `{
   "mcpServers": {
     "openschemaextract": {
@@ -318,10 +317,6 @@ function McpPanel({ isLoggedIn }: { isLoggedIn: boolean }) {
             <Hl t="command">claude</Hl>
             {" "}
             <Hl t="base">mcp add</Hl>
-            {" "}
-            <Hl t="flag">--transport</Hl>
-            {" "}
-            <Hl t="base">stdio</Hl>
             {" "}
             <Hl t="base">openschemaextract</Hl>
             {" "}
@@ -356,13 +351,7 @@ function McpPanel({ isLoggedIn }: { isLoggedIn: boolean }) {
             {" "}
             <Hl t="base">mcp add</Hl>
             {" "}
-            <Hl t="flag">--transport</Hl>
-            {" "}
-            <Hl t="base">stdio</Hl>
-            {" "}
-            <Hl t="punct">\</Hl>
-            {"\n  "}
-            <Hl t="flag">--env</Hl>
+            <Hl t="flag">-e</Hl>
             {" "}
             <Hl t="key">OPENSCHEMAEXTRACT_API_KEY</Hl>
             <Hl t="punct">=</Hl>
@@ -370,9 +359,9 @@ function McpPanel({ isLoggedIn }: { isLoggedIn: boolean }) {
             {" "}
             <Hl t="punct">\</Hl>
             {"\n  "}
-            <Hl t="base">openschemaextract</Hl>
-            {" "}
             <Hl t="punct">--</Hl>
+            {" "}
+            <Hl t="base">openschemaextract</Hl>
             {" "}
             <Hl t="command">npx</Hl>
             {" "}

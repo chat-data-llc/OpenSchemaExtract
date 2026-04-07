@@ -57,12 +57,11 @@ Get your API key from [https://openschemaextract.chat-data.com/dashboard](https:
 
 ```bash
 # Without API key (public demo)
-claude mcp add --transport stdio openschemaextract -- npx -y openschemaextract-mcp
+claude mcp add openschemaextract -- npx -y openschemaextract-mcp
 
 # With API key (unlimited)
-claude mcp add --transport stdio \
-  --env OPENSCHEMAEXTRACT_API_KEY=osx_live_your_key_here \
-  openschemaextract -- npx -y openschemaextract-mcp
+claude mcp add -e OPENSCHEMAEXTRACT_API_KEY=osx_live_your_key_here \
+  -- openschemaextract npx -y openschemaextract-mcp
 ```
 
 Or manually edit `~/.claude/settings.json`:

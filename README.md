@@ -66,9 +66,8 @@ Runs entirely on your server — no API calls, no rate limits.
 ### 4. MCP (Model Context Protocol)
 
 ```bash
-claude mcp add --transport stdio \
-  --env OPENSCHEMAEXTRACT_API_KEY=osx_live_your_key \
-  openschemaextract -- npx -y openschemaextract-mcp
+claude mcp add -e OPENSCHEMAEXTRACT_API_KEY=osx_live_your_key \
+  -- openschemaextract npx -y openschemaextract-mcp
 ```
 
 See [mcp-server/README.md](./mcp-server/README.md) for details.
