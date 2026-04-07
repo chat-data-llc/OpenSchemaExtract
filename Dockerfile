@@ -19,8 +19,13 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build Next.js app
+# Provide dummy env vars so Next.js can pre-render pages during build.
+# Real values are injected at runtime via docker-compose env_file.
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV MONGODB_URI=mongodb://placeholder:27017
+ENV AUTH_SECRET=build-placeholder
+ENV AUTH_URL=http://localhost:3000
+
 RUN npm run build
 
 # Production image, copy all the files and run next
