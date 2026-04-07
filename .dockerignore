@@ -8,7 +8,10 @@ yarn-error.log*
 .next/
 out/
 build/
+
+# Package build output
 dist/
+*.tgz
 
 # Testing
 coverage/
@@ -49,3 +52,5 @@ LICENSE
 .agents/
 tests/
 *.log
+mcp-server/node_modules
+mcp-server/dist
